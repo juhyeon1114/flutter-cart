@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cart/bloc/cart_bloc.dart';
 import 'package:flutter_cart/cart.dart';
 import 'package:flutter_cart/item.dart';
+import 'package:flutter_cart/main.dart';
 
 class Catalog extends StatefulWidget {
   @override
@@ -10,15 +10,8 @@ class Catalog extends StatefulWidget {
 }
 
 class _CatalogState extends State<Catalog> {
-  List<Item> _itemList = itemList;
-
   @override
   Widget build(BuildContext context) {
-    /**
-     * 상위 Widget에서 주입받은 Bloc에 접근하려면 이렇게 정의하고 접근하면 된다.
-     */
-    final _cartBloc = BlocProvider.of<CartBloc>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Catalog'),
@@ -28,22 +21,20 @@ class _CatalogState extends State<Catalog> {
           })
         ]
       ),
-      body: BlocBuilder<CartBloc, List>(
-        builder: (_, state) => ListView(
-          children: _itemList.map((item) => _buildItem(item, state, _cartBloc)).toList(),
+      body: StreamBuilder<List<Item>>(
+        stream: cartBloc.cartList,
+        builder: (context, snapshot) => ListView(
+          children: cartBloc.itemList.map((item) => _buildItem(item, snapshot.data)).toList()
         )
       )
-
     );
   }
 
-  Widget _buildItem(Item item, List state, CartBloc cartBloc) {
-    final isChecked = state.contains(item);
+  Widget _buildItem(Item item, List<Item> state) {
+    final isChecked = state == null ? false : state.contains(item);
 
     void toggleCheck() {
-      setState(() {
-        isChecked ? cartBloc.add(CartEvent(CartEventType.remove, item)) : cartBloc.add(CartEvent(CartEventType.add, item));
-      });
+      isChecked ? cartBloc.add(CartEvent(CartEventType.remove, item)) : cartBloc.add(CartEvent(CartEventType.add, item));
     }
 
     return Padding(

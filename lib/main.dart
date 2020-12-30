@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cart/bloc/cart_bloc.dart';
 import 'package:flutter_cart/catalog.dart';
 
@@ -7,25 +6,18 @@ void main() {
   runApp(MyApp());
 }
 
+final cartBloc = CartBloc();
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    /**
-     * BlocProvider == Bloc을 주입
-     * BlocBuilder == 주입받은 Bloc을 사용
-     */
-    return BlocProvider(
-        create: (_) => CartBloc(),
-        child: BlocBuilder<CartBloc, List>(
-          builder: (_, state) => MaterialApp(
-            title: 'Flutter Demo',
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-              visualDensity: VisualDensity.adaptivePlatformDensity,
-            ),
-            home: LoginScreen(),
-          )
-        )
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: LoginScreen(),
     );
   }
 }
