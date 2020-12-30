@@ -2,9 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc/bloc.dart';
 import '../item.dart';
 
-enum CartEventType {
-  add, remove
-}
+enum CartEventType { add, remove }
 
 class CartEvent {
   final CartEventType type;
@@ -14,7 +12,7 @@ class CartEvent {
 }
 
 class CartBloc extends Bloc<CartEvent, List<Item>> {
-  CartBloc(List<Item> initialState) : super([]);
+  CartBloc() : super([]);
 
   @override
   Stream<List<Item>> mapEventToState(CartEvent event) async* {
